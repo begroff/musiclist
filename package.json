@@ -3,15 +3,32 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "nodemon node ./bin/www"
+    "start": "nodemon node ./bin/www",
+    "test": "jest",
+    "lint": "eslint ."
   },
   "dependencies": {
     "cookie-parser": "1.4.4",
     "debug": "2.6.9",
     "ejs": "2.6.1",
     "express": "4.16.1",
+    "express-session": "1.10.1",
     "http-errors": "1.6.3",
+    "mongoose": "5.0.4",
     "morgan": "1.9.1",
-    "nodemon": "2.0.4"
+    "nodemon": "2.0.4",
+    "passport": "0.3.2",
+    "passport-local": "1.0.0",
+    "passport-local-mongoose": "4.0.0"
+  },
+  "devDependencies": {
+    "eslint": "^3.19.0",
+    "eslint-config-airbnb": "^15.1.0",
+    "eslint-plugin-import": "^2.22.0",
+    "eslint-plugin-jest": "^20.0.3",
+    "eslint-plugin-jsx-a11y": "^5.1.1",
+    "eslint-plugin-react": "^7.20.3",
+    "jest": "^19.0.2",
+    "supertest": "^3.0.0"
   }
 }
