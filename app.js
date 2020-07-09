@@ -11,6 +11,10 @@ const expressSession = require('express-session')({
   resave: false,
   saveUninitialized: false,
 });
+const webpack = require('webpack');
+const webpackConfig = require('./webpack.config');
+const webpackDevMiddleware = require('webpack-dev-middleware');
+const webpackHotMiddleware = require('webpack-hot-middleware');
 const User = require('./models/user');
 
 const indexRouter = require('./routes/index');
@@ -20,7 +24,7 @@ const users = require('./routes/api/users');
 const app = express();
 
 // Connect Mongoose
-mongoose.connect('mongodb://localhost/musiclist');
+mongoose.connect('mongodb://localhost:27018/musiclist');
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -37,9 +41,28 @@ app.use(passport.session());
 
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', indexRouter);
+// Webpack Server
+const webpackCompiler = webpack(webpackConfig);
+app.use(webpackDevMiddleware(webpackCompiler, {
+  publicPath: webpackConfig.output.publicPath,
+  stats: {
+    colors: true,
+    chunks: true,
+    'errors-only': true,
+  },
+  watchOptions: {
+    ignored: /node_modules/,
+  },
+}));
+
+app.use(webpackHotMiddleware(webpackCompiler, {
+  // eslint-disable-next-line no-console
+  log: console.log,
+}));
+
 app.use('/api', api);
 app.use('/api/users', users);
+app.use('/*', indexRouter);
 
 // Configure Passport
 passport.use(new LocalStrategy(User.authenticate()));
